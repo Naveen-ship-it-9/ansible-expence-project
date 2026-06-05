@@ -1,7 +1,6 @@
 - name: create a ec2 instance and records
   hosts: local
   connection: local
-  become: yes
   #zone: daws81.online
   vars:
     instances:
