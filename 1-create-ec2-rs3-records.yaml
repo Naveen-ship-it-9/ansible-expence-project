@@ -4,7 +4,7 @@
   become: yes
   #zone: daws81.online
   vars:
-    instance:
+    instances:
     - mysql
     - backend
     - frontend
@@ -16,11 +16,11 @@
       instance_type: "t3.micro"
       security_group: sg-0631707908cb6099d
       image_id: ami-0220d79f3f480ecf5
-    loop: "{{ instance }}"
-    register: ec2-instance
+    loop: "{{ instances }}"
+    register: ec2-instances
   - name: print the output
     ansible.builtin.debug:
-      msg: "{{ ec2_instance }}"
+      msg: "{{ ec2_instances }}"
 
 
   # - name: Add new.foo.com as an A record with 3 IPs and wait until the changes have been replicated
