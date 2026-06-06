@@ -1,13 +1,20 @@
 - name: create a ec2 instance and records
   hosts: web
   #connection: local
-  #zone: daws81.online
+  
   vars:
     instances:
     - mysql
     - backend
     - frontend
+    zone: daws81.online
   tasks:
+  - name: ansible to install boto3 and botocore
+    ansible.builtin.pip:
+      name:
+      - boto3
+      - botocore
+      executable: pip3.9
   - name: create ec2 instance
     amazon.aws.ec2_instance:
       name: "{{ item }}"
@@ -21,14 +28,13 @@
     ansible.builtin.debug:
       msg: "{{ ec2_instances }}"
 
-
-  # - name: Add new.foo.com as an A record with 3 IPs and wait until the changes have been replicated
-  #   amazon.aws.route53:
-  #     state: present
-  #     zone: "{{ zone }}"
-  #     record: "{{ item.item }}.{{ zone }}"
-  #     type: A
-  #     ttl: 1
-  #     value: "{{ item.instance [0]. private_ip_address }}"
-  #     wait: true
+- name: creating r53 records
+  amazon.aws.route53:
+      state: present
+      zone: "{{ zone }}"
+      record: "{{ item.item }}.{{ zone }}"
+      type: A
+      ttl: 1
+      value: "{{ item.instance [0]. private_ip_address }}"
+      wait: true
         
